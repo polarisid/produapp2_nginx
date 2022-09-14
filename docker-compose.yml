@@ -1,0 +1,44 @@
+services:
+  postgres_produapp_db:
+    image: postgres
+    container_name: postgres_produapp_db
+    restart: always
+    ports:
+      - 4457:5432
+    env_file:
+      - produapp2-back/.env
+    volumes: 
+      - pg_produapp-db:/var/lib/postgresql/data
+
+  node_produapp_app:
+    container_name: node_produapp_app
+    build: ./produapp2-back
+    ports:
+      - 80:4000
+      # - 4000:4000
+    depends_on:
+      - postgres_produapp_db
+    env_file:
+      - produapp2-back/.env
+
+  react_produapp_app:
+    container_name: react_produapp_app
+    build: ./produapp2-front
+    volumes:
+      - build_react:/var/www/html
+
+  nginx_produapp_app:
+    container_name: nginx_produapp_app
+    build: ./nginx
+    ports: 
+      - 8080:80
+    volumes:
+      - build_react:/var/www/html
+    depends_on:
+      - postgres_produapp_db
+      - node_produapp_app
+      - react_produapp_app
+
+volumes:
+  pg_produapp-db: 
+  build_react: 

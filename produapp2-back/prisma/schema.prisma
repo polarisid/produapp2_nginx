@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model historic {
+  id        Int @id  @default(autoincrement())
+  itemId    Int
+  item      item  @relation(fields: [itemId], references: [id])
+  userId    Int
+  user      users  @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  status    Status
+}
+
+model item {
+  id       Int      @id @default(autoincrement())
+  os       String  @unique
+  model    String
+  userId   Int
+  status    Status @default(Avaliation)
+  createTime DateTime @default(now()) @db.Timestamp(6)
+  updateTime DateTime  @db.Timestamp(6) @default(now())
+  elapsedTime Int @default(0)
+  userIdUpdated Int 
+  ffOqc    Boolean @default(false)
+  userCreated    users    @relation(name:"WriteOs",fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userChanged   users    @relation(name:"ChangeOs",fields: [userIdUpdated], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  historic historic[]
+
+  // @@id([userId, userIdUpdated])
+}
+
+model sessions {
+  id     Int    @id @default(autoincrement())
+  token  String @unique
+  userId Int
+  users  users  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model users {
+  id       Int        @id @default(autoincrement())
+  name     String     
+  role     Role       @default(USER)
+  email    String     @unique
+  password String
+  userWriteOs     item[] @relation("WriteOs")
+  userChangeOs     item[] @relation("ChangeOs")
+  ascCode  Ascs
+  historic historic[]
+  sessions sessions[]
+
+  @@map("Users")
+}
+
+enum Role {
+  USER
+  OQC
+  ADMIN
+}
+
+enum Ascs {
+  AJU3198122
+  SLZ5286953
+}
+
+enum Status {
+  Avaliation
+  Pending
+  TechnicalAdvice
+  Finished
+  OQCFail
+  ConfirmedCost
+  ConfirmedParts
+  ConfirmedSaw
+  OQCPass
+}

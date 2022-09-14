@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "item" ALTER COLUMN "updateTime" SET DEFAULT CURRENT_TIMESTAMP;

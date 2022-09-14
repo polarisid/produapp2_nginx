@@ -1,0 +1,25 @@
+services:
+  postgres_produapp_db:
+    image: postgres
+    container_name: postgres_produapp_db
+    restart: always
+    ports:
+      - 4457:5432
+    env_file:
+      - .env
+    volumes: 
+      - pg_produapp-db:/var/lib/postgresql/data
+
+  node_produapp_app:
+    container_name: node_produapp_app
+    build: .
+    ports:
+      - 80:4000
+      # - 4000:4000
+    depends_on:
+      - postgres_produapp_db
+    env_file:
+      - .env
+
+volumes:
+  pg_produapp-db:
