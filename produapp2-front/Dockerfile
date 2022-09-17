@@ -4,7 +4,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm i --force 
+RUN npm install -g npm@8.19.2
+RUN npm i --force
+
+
 
 RUN npm run build
 

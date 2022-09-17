@@ -12,9 +12,7 @@
 		"dev:migrate": "npx prisma migrate dev  && node dist/server.js",
 		"prisma:deploy": "prisma migrate deploy"
 	},
-	"engines": {
-		"node": "16.15.1"
-	},
+
 	"keywords": [],
 	"author": "",
 	"license": "ISC",

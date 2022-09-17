@@ -9,7 +9,7 @@ services:
       - produapp2-back/.env
     volumes: 
       - pg_produapp-db:/var/lib/postgresql/data
-   
+
   node_produapp_app:
     container_name: node_produapp_app
     build: ./produapp2-back
@@ -26,8 +26,6 @@ services:
     build: ./produapp2-front
     volumes:
       - build_react:/var/www/html
-    env_file:
-      - produapp2-front/.env
 
   nginx_produapp_app:
     container_name: nginx_produapp_app
